@@ -1,0 +1,57 @@
+<section>
+  <h2>Clients</h2>
+
+  <div class="toolbar">
+    <form method="GET" action="/clients">
+      <input type="text" name="cerca" placeholder="Nom o email" value="{{cerca}}">
+      <button class="btn">Cercar</button>
+    </form>
+
+    <label>
+      <input type="checkbox" name="vip" {{#if vip}}checked{{/if}} onchange="this.form.submit()">
+      Només VIP
+    </label>
+
+    <a href="/clientAfegir" class="btn">Afegir client</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Telèfon</th>
+        <th># Compres</th>
+        <th>Total gastat</th>
+        <th>Accions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each clients}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.phone}}</td>
+        <td>{{this.purchase_count}}</td>
+        <td>{{this.total_spent}} €</td>
+        <td>
+          <a class="btn btn-secondary" href="/clientFitxa?id={{this.id}}">Fitxa</a>
+          <a class="btn btn-secondary" href="/clientEditar?id={{this.id}}">Editar</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    {{#if tePaginaAnterior}}
+      <a class="btn btn-secondary" href="/clients?pagina={{paginaAnterior}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Anterior</a>
+    {{/if}}
+
+    <span>Pàgina {{paginaActual}}</span>
+
+    {{#if tePaginaSeguent}}
+      <a class="btn btn-secondary" href="/clients?pagina={{paginaSeguent}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Següent</a>
+    {{/if}}
+  </div>
+</section>

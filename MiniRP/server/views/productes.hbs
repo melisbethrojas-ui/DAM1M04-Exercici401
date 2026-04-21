@@ -1,0 +1,56 @@
+<section>
+  <h2>Productes</h2>
+
+  <div class="toolbar">
+    <form method="GET" action="/productes">
+      <input type="text" name="cerca" placeholder="Cerca..." value="{{cerca}}">
+      <button class="btn">Cercar</button>
+    </form>
+
+    <a href="/producteAfegir" class="btn">Afegir producte</a>
+  </div>
+
+  <label>
+    <input type="checkbox" id="toggle-stock-colors-productes">
+    Codi de colors stock
+  </label>
+
+  <table class="table stock-color-table" id="table-productes" data-color-enabled="false">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Categoria</th>
+        <th>Preu</th>
+        <th>Stock</th>
+        <th>Actiu</th>
+        <th>Accions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each productes}}
+      <tr data-stock="{{this.stock}}">
+        <td>{{this.name}}</td>
+        <td>{{this.category}}</td>
+        <td>{{this.price}} €</td>
+        <td class="stock-cell">{{this.stock}}</td>
+        <td>{{#if this.active}}Sí{{else}}No{{/if}}</td>
+        <td>
+          <a class="btn btn-secondary" href="/producteEditar?id={{this.id}}">Editar</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    {{#if tePaginaAnterior}}
+      <a class="btn btn-secondary" href="/productes?pagina={{paginaAnterior}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Anterior</a>
+    {{/if}}
+
+    <span>Pàgina {{paginaActual}}</span>
+
+    {{#if tePaginaSeguent}}
+      <a class="btn btn-secondary" href="/productes?pagina={{paginaSeguent}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Següent</a>
+    {{/if}}
+  </div>
+</section>

@@ -1,0 +1,28 @@
+<section>
+  <h2>Vendes</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Client</th>
+        <th>Total</th>
+        <th>Estat</th>
+        <th>Accions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each vendes}}
+      <tr>
+        <td>{{this.date}}</td>
+        <td>{{this.customer_name}}</td>
+        <td>{{this.total}} €</td>
+        <td>{{this.status}}</td>
+        <td>
+          <a class="btn btn-secondary" href="/vendes?id={{this.id}}">Veure</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</section>
