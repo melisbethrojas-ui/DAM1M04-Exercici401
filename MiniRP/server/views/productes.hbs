@@ -1,56 +1,69 @@
-<section>
-  <h2>Productes</h2>
+{{> header}}
+{{> menu}}
 
-  <div class="toolbar">
-    <form method="GET" action="/productes">
-      <input type="text" name="cerca" placeholder="Cerca..." value="{{cerca}}">
-      <button class="btn">Cercar</button>
-    </form>
+<div class="page-container">
 
-    <a href="/producteAfegir" class="btn">Afegir producte</a>
-  </div>
+<h1>Gestión de productos</h1>
 
-  <label>
-    <input type="checkbox" id="toggle-stock-colors-productes">
-    Codi de colors stock
-  </label>
+<!-- BUSCADOR + TOGGLE -->
+<div class="card">
+  <form method="GET" action="/productes" class="search-bar">
+    
+    <input type="text" name="cerca" placeholder="Buscar productos..." value="{{cerca}}">
 
-  <table class="table stock-color-table" id="table-productes" data-color-enabled="false">
+    <!-- 🔥 ID CORREGIDO -->
+    <label class="toggle">
+      <input type="checkbox" id="toggleStockColors">
+      <span>Colores de stock</span>
+    </label>
+
+    <button class="btn">Buscar</button>
+  </form>
+</div>
+
+<!-- TABLA -->
+<div class="card">
+  <table class="table">
     <thead>
       <tr>
-        <th>Nom</th>
-        <th>Categoria</th>
-        <th>Preu</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
         <th>Stock</th>
-        <th>Actiu</th>
-        <th>Accions</th>
+        <th>Activo</th>
+        <th>Acciones</th>
       </tr>
     </thead>
+
     <tbody>
       {{#each productes}}
-      <tr data-stock="{{this.stock}}">
-        <td>{{this.name}}</td>
-        <td>{{this.category}}</td>
-        <td>{{this.price}} €</td>
-        <td class="stock-cell">{{this.stock}}</td>
-        <td>{{#if this.active}}Sí{{else}}No{{/if}}</td>
-        <td>
-          <a class="btn btn-secondary" href="/producteEditar?id={{this.id}}">Editar</a>
+      <tr>
+
+        <td>{{name}}</td>
+        <td>{{category}}</td>
+        <td>{{price}} €</td>
+
+        <!-- 🔥 IMPORTANTE -->
+        <td class="stock-value">
+          {{stock}}
         </td>
+
+        <td>{{#if active}}Sí{{else}}No{{/if}}</td>
+
+        <td class="table-actions">
+          <a class="btn-secondary" href="/producteEditar?id={{id}}">Editar</a>
+        </td>
+
       </tr>
       {{/each}}
     </tbody>
   </table>
+</div>
 
-  <div class="pagination">
-    {{#if tePaginaAnterior}}
-      <a class="btn btn-secondary" href="/productes?pagina={{paginaAnterior}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Anterior</a>
-    {{/if}}
+<a class="btn" href="/producteAfegir" style="margin-top:20px; display:inline-block;">
+  Agregar producto
+</a>
 
-    <span>Pàgina {{paginaActual}}</span>
+</div>
 
-    {{#if tePaginaSeguent}}
-      <a class="btn btn-secondary" href="/productes?pagina={{paginaSeguent}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Següent</a>
-    {{/if}}
-  </div>
-</section>
+{{> footer}}

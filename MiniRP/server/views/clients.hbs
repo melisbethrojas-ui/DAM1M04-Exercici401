@@ -1,57 +1,67 @@
-<section>
-  <h2>Clients</h2>
+{{> header}}
+{{> menu}}
 
-  <div class="toolbar">
-    <form method="GET" action="/clients">
-      <input type="text" name="cerca" placeholder="Nom o email" value="{{cerca}}">
-      <button class="btn">Cercar</button>
-    </form>
+<div class="page-container">
 
-    <label>
-      <input type="checkbox" name="vip" {{#if vip}}checked{{/if}} onchange="this.form.submit()">
-      Només VIP
+<h1>Gestión de clientes</h1>
+
+<div class="card">
+  <form method="GET" action="/clients" class="search-bar">
+    <input type="text" name="cerca" placeholder="Buscar clientes..." value="{{cerca}}">
+
+    <label class="filter-checkbox">
+      <input type="checkbox" name="vip" value="1" {{#if vip}}checked{{/if}}>
+      Solo VIP
     </label>
 
-    <a href="/clientAfegir" class="btn">Afegir client</a>
-  </div>
+    <button class="btn">Buscar</button>
+  </form>
+</div>
 
+<div class="card">
   <table class="table">
     <thead>
       <tr>
-        <th>Nom</th>
+        <th>Nombre</th>
         <th>Email</th>
-        <th>Telèfon</th>
-        <th># Compres</th>
-        <th>Total gastat</th>
-        <th>Accions</th>
+        <th>Teléfono</th>
+        <th># Compras</th>
+        <th>Total gastado</th>
+        <th>Acciones</th>
       </tr>
     </thead>
+
     <tbody>
-      {{#each clients}}
+      {{#each customers}}
       <tr>
-        <td>{{this.name}}</td>
-        <td>{{this.email}}</td>
-        <td>{{this.phone}}</td>
-        <td>{{this.purchase_count}}</td>
-        <td>{{this.total_spent}} €</td>
-        <td>
-          <a class="btn btn-secondary" href="/clientFitxa?id={{this.id}}">Fitxa</a>
-          <a class="btn btn-secondary" href="/clientEditar?id={{this.id}}">Editar</a>
+        <td>{{name}}</td>
+        <td>{{email}}</td>
+        <td>{{phone}}</td>
+        <td>{{num_compras}}</td>
+        <td>{{total_gastado}} €</td>
+
+        <td class="table-actions">
+          <a class="btn-secondary" href="/clientEditar?id={{id}}">Editar</a>
+          <a class="btn-secondary" href="/clientFitxa?id={{id}}">Ficha</a>
         </td>
       </tr>
       {{/each}}
     </tbody>
   </table>
+</div>
 
-  <div class="pagination">
-    {{#if tePaginaAnterior}}
-      <a class="btn btn-secondary" href="/clients?pagina={{paginaAnterior}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Anterior</a>
-    {{/if}}
+<div class="pagination">
+  {{#if paginaAnterior}}
+    <a href="/clients?pagina={{paginaAnterior}}&cerca={{cerca}}&vip={{vip}}">Anterior</a>
+  {{/if}}
 
-    <span>Pàgina {{paginaActual}}</span>
+  {{#if paginaSiguiente}}
+    <a href="/clients?pagina={{paginaSiguiente}}&cerca={{cerca}}&vip={{vip}}">Siguiente</a>
+  {{/if}}
+</div>
 
-    {{#if tePaginaSeguent}}
-      <a class="btn btn-secondary" href="/clients?pagina={{paginaSeguent}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Següent</a>
-    {{/if}}
-  </div>
-</section>
+<a class="btn" href="/clientAfegir" style="margin-top:20px; display:inline-block;">Agregar cliente</a>
+
+</div>
+
+{{> footer}}

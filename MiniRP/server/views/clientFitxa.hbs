@@ -1,32 +1,20 @@
-<section>
-  <h2>Fitxa del client</h2>
+<h1>Ficha del cliente</h1>
 
-  <div class="card">
-    <h3>Dades</h3>
-    <p><strong>Nom:</strong> {{client.name}}</p>
-    <p><strong>Email:</strong> {{client.email}}</p>
-    <p><strong>Telèfon:</strong> {{client.phone}}</p>
-    <p><strong>Total gastat:</strong> {{client.total_spent}} €</p>
-    <p><strong>Ticket mitjà:</strong> {{client.avg_ticket}} €</p>
-  </div>
+<div class="client-info">
+  <p><strong>Nombre:</strong> {{client.name}}</p>
+  <p><strong>Email:</strong> {{client.email}}</p>
+  <p><strong>Teléfono:</strong> {{client.phone}}</p>
+</div>
 
-  <div class="card">
-    <h3>Últimes 10 compres</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each historial}}
-        <tr>
-          <td>{{this.date}}</td>
-          <td>{{this.total}} €</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
-</section>
+<h2>Historial de compras</h2>
+
+<div class="card client-history">
+  <ul class="list-clean">
+    {{#each vendes}}
+      <li class="sales-row">
+        <span>{{sale_date}}</span>
+        <strong>{{total}} €</strong>
+      </li>
+    {{/each}}
+  </ul>
+</div>

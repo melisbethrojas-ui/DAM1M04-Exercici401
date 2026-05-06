@@ -1,28 +1,32 @@
-<section>
-  <h2>Vendes</h2>
+{{> header}}
+{{> menu}}
 
+<div class="page-container">
+
+<h1>Historial de ventas</h1>
+
+<div class="card">
   <table class="table">
     <thead>
       <tr>
-        <th>Data</th>
-        <th>Client</th>
+        <th>Fecha</th>
+        <th>Cliente</th>
         <th>Total</th>
-        <th>Estat</th>
-        <th>Accions</th>
       </tr>
     </thead>
+
     <tbody>
-      {{#each vendes}}
+      {{#each sales}}
       <tr>
-        <td>{{this.date}}</td>
-        <td>{{this.customer_name}}</td>
-        <td>{{this.total}} €</td>
-        <td>{{this.status}}</td>
-        <td>
-          <a class="btn btn-secondary" href="/vendes?id={{this.id}}">Veure</a>
-        </td>
+        <td>{{sale_date}}</td>
+        <td>{{client}}</td>
+        <td>{{total}} €</td>
       </tr>
       {{/each}}
     </tbody>
   </table>
-</section>
+</div>
+
+</div>
+
+{{> footer}}
