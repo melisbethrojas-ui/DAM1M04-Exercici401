@@ -553,3 +553,14 @@ h3{
     padding-inline:18px;
   }
 }
+
+
+/* ===========================
+   CONTENEDOR PRINCIPAL
+=========================== */
+.container {
+    width: 90%;            /* Ocupa el 90% del ancho en pantallas pequeñas */
+    max-width: 1200px;     /* No deja que crezca más de 1200px en pantallas grandes */
+    margin: 40px auto;     /* El 'auto' lo centra horizontalmente; el '40px' da margen arriba y abajo */
+    min-height: 80vh;      /* Opcional: asegura que el contenido ocupe casi toda la altura de la pantalla */
+}

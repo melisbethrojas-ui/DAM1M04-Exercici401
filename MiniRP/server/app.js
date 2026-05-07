@@ -16,15 +16,15 @@ const db = new MySQL();
 if (!isProxmox) {
   db.init({
     host: '127.0.0.1',
-    port: 3307,
+    port: 3306,
     user: 'root',
     password: '1234',
     database: 'minierp'
   });
 } else {
   db.init({
-    host: '127.0.0.1',
-    port: 3306,
+    host: 'localhost',
+    port: 3307,
     user: 'super',
     password: '1234',
     database: 'minierp'
@@ -34,11 +34,12 @@ if (!isProxmox) {
 // =====================================
 // MIDDLEWARES
 // =====================================
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.urlencoded({ extended: true }));
 
-app.set('views', path.join(__dirname, 'views'));
+
 app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
 
 hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 
