@@ -564,3 +564,27 @@ h3{
     margin: 40px auto;     /* El 'auto' lo centra horizontalmente; el '40px' da margen arriba y abajo */
     min-height: 80vh;      /* Opcional: asegura que el contenido ocupe casi toda la altura de la pantalla */
 }
+
+/* Alineación de los elementos dentro de la barra de búsqueda */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.search-bar input[type="text"] {
+  flex: 1; /* El buscador ocupa el espacio sobrante */
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}

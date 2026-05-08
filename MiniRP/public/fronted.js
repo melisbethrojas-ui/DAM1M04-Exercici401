@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   // STOCK COLORS (PRO)
   // =========================
-  const stockToggle = document.getElementById("toggleStockColors");
+  const stockToggle = document.getElementById("");
 
   function pintarStock() {
 

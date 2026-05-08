@@ -1,50 +1,104 @@
-<h1>Editar producto</h1>
+{{> header}}
+{{> menu}}
 
-<div class="card form-card">
-  <form method="POST" action="/update" onsubmit="return validarProducto()">
+<main class="container">
+  <div class="page-container">
 
-    <input type="hidden" name="taula" value="products">
-    <input type="hidden" name="id" value="{{producte.id}}">
+    <h1>Editar producto</h1>
 
-    <div class="form-group">
-      <label>Nombre</label>
-      <input id="name" name="name" type="text" value="{{producte.name}}">
-      <div class="form-error">El nombre es demasiado corto</div>
+    <div class="card form-card">
+      <form id="formProducto" method="POST" action="/update" onsubmit="return validarProducto()">
+
+        <input type="hidden" name="taula" value="products">
+        <input type="hidden" name="id" value="{{producte.id}}">
+
+        <div class="form-group" id="group-name">
+          <label>Nombre</label>
+          <input id="name" name="name" type="text" value="{{producte.name}}">
+          <div class="form-error">El nombre debe tener al menos 3 caracteres</div>
+        </div>
+
+        <div class="form-group" id="group-category">
+          <label>Categoría</label>
+          <input id="category" name="category" type="text" value="{{producte.category}}">
+        </div>
+
+        <div class="form-group" id="group-price">
+          <label>Precio (€)</label>
+          <input id="price" name="price" type="number" step="0.01" value="{{producte.price}}">
+          <div class="form-error">El precio debe ser mayor a 0</div>
+        </div>
+
+        <div class="form-group" id="group-stock">
+          <label>Stock</label>
+          <input id="stock" name="stock" type="number" value="{{producte.stock}}">
+          <div class="form-error">El stock no puede ser negativo</div>
+        </div>
+
+        <div class="form-group">
+          <label>Activo</label>
+          <select name="active">
+            <option value="1" {{#if (eq producte.active 1)}}selected{{/if}}>Sí</option>
+            <option value="0" {{#if (eq producte.active 0)}}selected{{/if}}>No</option>
+          </select>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+          <button type="submit" class="btn">Guardar cambios</button>
+          <a href="/productes" class="btn-secondary">Volver</a>
+        </div>
+      </form>
     </div>
 
-    <div class="form-group">
-      <label>Categoría</label>
-      <input id="category" name="category" type="text" value="{{producte.category}}">
+    <div class="delete-zone" style="max-width: 600px; margin: 40px auto 0;">
+      <h3 style="color: var(--error);">Zona de peligro</h3>
+      <p style="font-size: 0.85rem; color: var(--text-soft); margin-bottom: 15px;">
+        Esta acción es irreversible. El producto se eliminará de la base de datos de forma permanente.
+      </p>
+      <form method="POST" action="/delete" onsubmit="return confirm('¿Estás seguro de eliminar este producto?')">
+        <input type="hidden" name="taula" value="products">
+        <input type="hidden" name="id" value="{{producte.id}}">
+        <button class="btn-danger">Eliminar producto definitivamente</button>
+      </form>
     </div>
 
-    <div class="form-group">
-      <label>Precio</label>
-      <input id="price" name="price" type="number" step="0.01" value="{{producte.price}}">
-      <div class="form-error">Precio inválido</div>
-    </div>
+  </div>
+</main>
 
-    <div class="form-group">
-      <label>Stock</label>
-      <input id="stock" name="stock" type="number" value="{{producte.stock}}">
-      <div class="form-error">Stock inválido</div>
-    </div>
+<script>
+// Reutilizamos la misma validación que en el de añadir
+function validarProducto() {
+  let esValido = true;
 
-    <div class="form-group">
-      <label>Activo</label>
-      <select name="active">
-        <option value="1" {{#if producte.active}}selected{{/if}}>Sí</option>
-        <option value="0" {{#unless producte.active}}selected{{/unless}}>No</option>
-      </select>
-    </div>
+  const name = document.getElementById('name');
+  const groupName = document.getElementById('group-name');
+  if (name.value.trim().length < 3) {
+    groupName.classList.add('error');
+    esValido = false;
+  } else {
+    groupName.classList.remove('error');
+  }
 
-    <button class="btn">Guardar cambios</button>
-  </form>
-</div>
+  const price = document.getElementById('price');
+  const groupPrice = document.getElementById('group-price');
+  if (parseFloat(price.value) <= 0 || price.value === "") {
+    groupPrice.classList.add('error');
+    esValido = false;
+  } else {
+    groupPrice.classList.remove('error');
+  }
 
-<div class="delete-zone">
-  <form method="POST" action="/delete">
-    <input type="hidden" name="taula" value="products">
-    <input type="hidden" name="id" value="{{producte.id}}">
-    <button class="btn-danger">Eliminar producto</button>
-  </form>
-</div>
+  const stock = document.getElementById('stock');
+  const groupStock = document.getElementById('group-stock');
+  if (stock.value === "" || parseInt(stock.value) < 0) {
+    groupStock.classList.add('error');
+    esValido = false;
+  } else {
+    groupStock.classList.remove('error');
+  }
+
+  return esValido;
+}
+</script>
+
+{{> footer}}

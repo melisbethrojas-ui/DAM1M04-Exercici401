@@ -1,32 +1,33 @@
 {{> header}}
 {{> menu}}
 
-<div class="page-container">
+<main class="container">
+  <div class="page-container">
 
-<h1>Historial de ventas</h1>
+  <h1>Historial de ventas</h1>
 
-<div class="card">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Cliente</th>
-        <th>Total</th>
-      </tr>
-    </thead>
+  <div class="card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Total</th>
+        </tr>
+      </thead>
 
-    <tbody>
-      {{#each sales}}
-      <tr>
-        <td>{{sale_date}}</td>
-        <td>{{client}}</td>
-        <td>{{total}} €</td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+      <tbody>
+        {{#each sales}}
+        <tr>
+          <td>{{sale_date}}</td>
+          <td>{{client}}</td>
+          <td>{{total}} €</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
-</div>
-
+  </div>
+</main>
 {{> footer}}

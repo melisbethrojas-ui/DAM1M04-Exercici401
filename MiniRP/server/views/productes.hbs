@@ -1,29 +1,31 @@
 {{> header}}
 {{> menu}}
+<main class="container">  
+  <div class="page-container">
 
-<div class="page-container">
+  <h1>Gestión de productos</h1>
 
-<h1>Gestión de productos</h1>
+  <!-- BUSCADOR + TOGGLE -->
+  <div class="card">
+    <form method="GET" action="/productes" class="search-bar">
+      
+      <input type="text" name="cerca" placeholder="Buscar productos..." value="{{cerca}}">
 
-<!-- BUSCADOR + TOGGLE -->
+      <!-- 🔥 ID CORREGIDO -->
+      <label class="toggle">
+        <input type="checkbox" id="toggleStockColors">
+        <span>Colores de stock</span>
+      </label>
+
+      <button class="btn">Buscar</button>
+    </form>
+  </div>
+
+  <!-- TABLA -->
+  <!-- TABLA -->
 <div class="card">
-  <form method="GET" action="/productes" class="search-bar">
-    
-    <input type="text" name="cerca" placeholder="Buscar productos..." value="{{cerca}}">
-
-    <!-- 🔥 ID CORREGIDO -->
-    <label class="toggle">
-      <input type="checkbox" id="toggleStockColors">
-      <span>Colores de stock</span>
-    </label>
-
-    <button class="btn">Buscar</button>
-  </form>
-</div>
-
-<!-- TABLA -->
-<div class="card">
-  <table class="table">
+  <!-- Añadimos un ID a la tabla para el JS y verificamos si debe empezar coloreada -->
+  <table class="table" id="productTable">
     <thead>
       <tr>
         <th>Nombre</th>
@@ -38,32 +40,61 @@
     <tbody>
       {{#each productes}}
       <tr>
-
         <td>{{name}}</td>
         <td>{{category}}</td>
         <td>{{price}} €</td>
 
-        <!-- 🔥 IMPORTANTE -->
-        <td class="stock-value">
+        <!-- Dinamismo de colores basado en el valor de stock -->
+        <td class="stock-value 
+            {{#if (gt stock 20)}}stock-ok{{else}}{{#if (gt stock 5)}}stock-low{{else}}stock-critical{{/if}}{{/if}}">
           {{stock}}
         </td>
 
         <td>{{#if active}}Sí{{else}}No{{/if}}</td>
-
         <td class="table-actions">
           <a class="btn-secondary" href="/producteEditar?id={{id}}">Editar</a>
         </td>
-
       </tr>
       {{/each}}
     </tbody>
   </table>
 </div>
 
-<a class="btn" href="/producteAfegir" style="margin-top:20px; display:inline-block;">
-  Agregar producto
-</a>
+<script>
+  const toggle = document.getElementById('toggleStockColors');
+  const table = document.getElementById('productTable');
 
-</div>
+  // 1. Al cargar la página, comprobar si el toggle estaba activo (opcional pero recomendado)
+  // Si quieres que al pulsar "Buscar" se mantenga el color, necesitarías pasar el estado por URL,
+  // pero por ahora hagamos que funcione el click:
+
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      table.classList.add('stock-colored');
+    } else {
+      table.classList.remove('stock-colored');
+    }
+  });
+</script>
+
+  <a class="btn" href="/producteAfegir" style="margin-top:20px; display:inline-block;">
+    Agregar producto
+  </a>
+
+  </div>
+</main>
+<script>
+  const toggle = document.getElementById('toggleStockColors');
+  const table = document.querySelector('.table');
+
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      table.classList.add('stock-colored');
+    } else {
+      table.classList.remove('stock-colored');
+    }
+  });
+</script>
+
 
 {{> footer}}

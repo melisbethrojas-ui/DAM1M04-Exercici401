@@ -119,11 +119,13 @@ app.get('/productes', async (req, res) => {
     const limit = 10;
     const offset = pagina * limit;
 
+    // En app.js -> app.get('/productes')
     const rows = await db.query(`
-      SELECT *
-      FROM products
-      WHERE name LIKE ? OR category LIKE ?
-      LIMIT ? OFFSET ?
+        SELECT *
+        FROM products
+        WHERE name LIKE ? OR category LIKE ?
+        ORDER BY id DESC    -- <--- AÑADE ESTA LÍNEA
+        LIMIT ? OFFSET ?
     `, [`%${cerca}%`, `%${cerca}%`, limit, offset]);
 
     const countRows = await db.query(`
@@ -326,24 +328,25 @@ app.get('/vendes', async (req, res) => {
 // CREATE
 // =====================================
 app.post('/create', async (req, res) => {
-
   try {
+    let { taula, ...data } = req.body;
 
-    const { taula, ...data } = req.body;
+    // Si por error 'taula' llega como array ["products", "products"], 
+    // tomamos solo el primer elemento.
+    if (Array.isArray(taula)) {
+      taula = taula[0];
+    }
 
-    await db.query(`
-      INSERT INTO ${taula} SET ?
-    `, [data]);
+    console.log("Insertando en:", taula); // Para verificar en consola
 
+    await db.query(`INSERT INTO ${taula} SET ?`, [data]);
     res.redirect(redireccionar(taula));
 
   } catch (err) {
-    console.log(err);
-    res.send("Error create");
+    console.error("Error SQL:", err.sqlMessage || err);
+    res.status(500).send("Error al guardar: " + (err.sqlMessage || "Datos inválidos"));
   }
-
 });
-
 // =====================================
 // UPDATE
 // =====================================
