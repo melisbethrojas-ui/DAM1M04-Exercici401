@@ -189,12 +189,13 @@ app.get('/producteEditar', async (req, res) => {
 // CLIENTS
 // =====================================
 app.get('/clients', async (req, res) => {
-
   try {
-
     const pagina = parseInt(req.query.pagina) || 0;
     const cerca = req.query.cerca || "";
     const vip = req.query.vip === "1";
+
+    const limit = 10;
+    const offset = pagina * limit;
 
     let where = `WHERE name LIKE ? OR email LIKE ?`;
     let params = [`%${cerca}%`, `%${cerca}%`];
@@ -209,25 +210,37 @@ app.get('/clients', async (req, res) => {
       )`;
     }
 
+    // Consulta con el orden correcto: WHERE -> ORDER BY -> LIMIT
     const rows = await db.query(`
       SELECT *
       FROM customers
       ${where}
-      LIMIT 10 OFFSET ?
-    `, [...params, pagina * 10]);
+      ORDER BY id DESC
+      LIMIT ? OFFSET ?
+    `, [...params, limit, offset]); // Añadimos limit y offset como parámetros finales
+
+    // También necesitamos contar el total para la paginación (opcional pero recomendado)
+    const countRows = await db.query(`
+      SELECT COUNT(*) as total FROM customers ${where}
+    `, params);
+    
+    const total = countRows[0].total;
 
     res.render('clients', {
       customers: db.table_to_json(rows),
       pagina,
       cerca,
-      vip
+      vip,
+      tePaginaAnterior: pagina > 0,
+      tePaginaSeguent: offset + limit < total,
+      paginaAnterior: pagina - 1,
+      paginaSeguent: pagina + 1
     });
 
   } catch (err) {
-    console.log(err);
-    res.send("Error clients");
+    console.error("Error en ruta /clients:", err);
+    res.status(500).send("Error al cargar los clientes");
   }
-
 });
 
 // =====================================

@@ -1,37 +1,93 @@
-<h1>Editar cliente</h1>
+{{> header}}
+{{> menu}}
 
-<div class="card form-card">
-  <form method="POST" action="/update" onsubmit="return validarCliente()">
+<main class="container">
+  <div class="page-container">
+    
+    <h1>Editar cliente</h1>
 
-    <input type="hidden" name="taula" value="customers">
-    <input type="hidden" name="id" value="{{client.id}}">
+    <div class="card form-card">
+      <form id="formCliente" method="POST" action="/update" onsubmit="return validarCliente()">
 
-    <div class="form-group">
-      <label>Nombre</label>
-      <input id="name" name="name" type="text" value="{{client.name}}">
-      <div class="form-error">El nombre es demasiado corto</div>
+        <input type="hidden" name="taula" value="customers">
+        <input type="hidden" name="id" value="{{client.id}}">
+
+        <div class="form-group" id="group-name">
+          <label>Nombre</label>
+          <input id="name" name="name" type="text" value="{{client.name}}">
+          <div class="form-error">El nombre es demasiado corto (mín. 3 caracteres)</div>
+        </div>
+
+        <div class="form-group" id="group-email">
+          <label>Email</label>
+          <input id="email" name="email" type="email" value="{{client.email}}">
+          <div class="form-error">Introduce un email válido</div>
+        </div>
+
+        <div class="form-group" id="group-phone">
+          <label>Teléfono</label>
+          <input id="phone" name="phone" type="text" value="{{client.phone}}">
+          <div class="form-error">Teléfono inválido (mín. 9 dígitos)</div>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+          <button type="submit" class="btn">Guardar cambios</button>
+          <a href="/clients" class="btn-secondary">Cancelar</a>
+        </div>
+      </form>
     </div>
 
-    <div class="form-group">
-      <label>Email</label>
-      <input id="email" name="email" type="email" value="{{client.email}}">
-      <div class="form-error">Email inválido</div>
+    <div class="delete-zone" style="max-width: 600px; margin: 40px auto 0;">
+      <h3 style="color: var(--error);">Zona de peligro</h3>
+      <p style="font-size: 0.85rem; color: var(--text-soft); margin-bottom: 15px;">
+        Al eliminar este cliente, se borrarán sus datos permanentemente. Asegúrate de que no tenga ventas pendientes.
+      </p>
+      <form method="POST" action="/delete" onsubmit="return confirm('¿Estás 100% seguro de que quieres eliminar a este cliente?')">
+        <input type="hidden" name="taula" value="customers">
+        <input type="hidden" name="id" value="{{client.id}}">
+        <button class="btn-danger">Eliminar cliente definitivamente</button>
+      </form>
     </div>
 
-    <div class="form-group">
-      <label>Teléfono</label>
-      <input id="phone" name="phone" type="text" value="{{client.phone}}">
-      <div class="form-error">Teléfono inválido</div>
-    </div>
+  </div>
+</main>
 
-    <button class="btn">Guardar cambios</button>
-  </form>
-</div>
+<script>
+function validarCliente() {
+  let esValido = true;
 
-<div class="delete-zone">
-  <form method="POST" action="/delete">
-    <input type="hidden" name="taula" value="customers">
-    <input type="hidden" name="id" value="{{client.id}}">
-    <button class="btn-danger">Eliminar cliente</button>
-  </form>
-</div>
+  // Validar Nombre
+  const name = document.getElementById('name');
+  const groupName = document.getElementById('group-name');
+  if (name.value.trim().length < 3) {
+    groupName.classList.add('error');
+    esValido = false;
+  } else {
+    groupName.classList.remove('error');
+  }
+
+  // Validar Email básico
+  const email = document.getElementById('email');
+  const groupEmail = document.getElementById('group-email');
+  if (!email.value.includes('@') || email.value.length < 5) {
+    groupEmail.classList.add('error');
+    esValido = false;
+  } else {
+    groupEmail.classList.remove('error');
+  }
+
+  // Validar Teléfono básico
+  const phone = document.getElementById('phone');
+  const groupPhone = document.getElementById('group-phone');
+  if (phone.value.trim().length < 9) {
+    groupPhone.classList.add('error');
+    esValido = false;
+  } else {
+    groupPhone.classList.remove('error');
+  }
+
+  return esValido;
+}
+</script>
+
+{{> footer}}

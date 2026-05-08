@@ -1,20 +1,58 @@
-<h1>Ficha del cliente</h1>
+{{> header}}
+{{> menu}}
 
-<div class="client-info">
-  <p><strong>Nombre:</strong> {{client.name}}</p>
-  <p><strong>Email:</strong> {{client.email}}</p>
-  <p><strong>Teléfono:</strong> {{client.phone}}</p>
-</div>
+<main class="container">
+  <div class="page-container">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h1>Ficha del cliente</h1>
+      <a href="/clientEditar?id={{client.id}}" class="btn">Editar perfil</a>
+    </div>
 
-<h2>Historial de compras</h2>
+    <div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+      <div class="info-item">
+        <h3 style="margin-bottom: 5px;">Nombre</h3>
+        <p style="font-size: 1.1rem; font-weight: 700;">{{client.name}}</p>
+      </div>
+      <div class="info-item">
+        <h3 style="margin-bottom: 5px;">Email</h3>
+        <p style="color: var(--primary); font-weight: 600;">{{client.email}}</p>
+      </div>
+      <div class="info-item">
+        <h3 style="margin-bottom: 5px;">Teléfono</h3>
+        <p>{{client.phone}}</p>
+      </div>
+    </div>
 
-<div class="card client-history">
-  <ul class="list-clean">
-    {{#each vendes}}
-      <li class="sales-row">
-        <span>{{sale_date}}</span>
-        <strong>{{total}} €</strong>
-      </li>
-    {{/each}}
-  </ul>
-</div>
+    <h2>Historial de compras</h2>
+
+    <div class="card client-history">
+      {{#if vendes.length}}
+        <ul class="list-clean">
+          {{#each vendes}}
+            <li class="sales-row" style="padding: 15px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="color: var(--text-soft); font-size: 0.9rem;">Fecha de compra:</span>
+                <strong style="display: block;">{{sale_date}}</strong>
+              </div>
+              <div style="text-align: right;">
+                <span style="display: block; font-size: 1.2rem; font-weight: 800; color: var(--secondary);">{{total}} €</span>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p style="text-align: center; color: var(--text-soft); padding: 20px;">
+          Este cliente aún no ha realizado ninguna compra.
+        </p>
+      {{/if}}
+    </div>
+
+    <div style="margin-top: 30px;">
+      <a href="/clients" class="btn-secondary">Volver al listado</a>
+    </div>
+
+  </div>
+</main>
+
+{{> footer}}

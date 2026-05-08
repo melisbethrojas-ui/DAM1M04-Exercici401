@@ -50,14 +50,22 @@
     </table>
   </div>
 
-  <div class="pagination">
-    {{#if paginaAnterior}}
-      <a href="/clients?pagina={{paginaAnterior}}&cerca={{cerca}}&vip={{vip}}">Anterior</a>
+  <div class="pagination" style="margin-top: 20px; display: flex; gap: 10px; align-items: center;">
+  
+    {{#if tePaginaAnterior}}
+      <a class="btn-secondary" href="/clients?pagina={{paginaAnterior}}&cerca={{cerca}}&vip={{#if vip}}1{{else}}0{{/if}}">
+        &laquo; Anterior
+      </a>
     {{/if}}
 
-    {{#if paginaSiguiente}}
-      <a href="/clients?pagina={{paginaSiguiente}}&cerca={{cerca}}&vip={{vip}}">Siguiente</a>
+    <span style="font-weight: bold;">Página {{plus pagina 1}}</span>
+
+    {{#if tePaginaSeguent}}
+      <a class="btn-secondary" href="/clients?pagina={{paginaSeguent}}&cerca={{cerca}}&vip={{#if vip}}1{{else}}0{{/if}}">
+        Siguiente &raquo;
+      </a>
     {{/if}}
+    
   </div>
 
   <a class="btn" href="/clientAfegir" style="margin-top:20px; display:inline-block;">Agregar cliente</a>
