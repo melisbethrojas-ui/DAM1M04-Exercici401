@@ -4,86 +4,94 @@
 <main class="container">
   <div class="page-container">
 
-  <div class="index-header">
-    <h1>Panell de control</h1>
+    <div class="index-header">
+      <h1>Panell de control</h1>
 
-    <div class="index-controls">
-      <button class="tab-btn active" data-tab="kpi">KPI</button>
-      <button class="tab-btn" data-tab="llistats">Llistats</button>
-
-      <label>
-        <input type="checkbox" id="compactToggle">
-        Tauler compacte
-      </label>
+      <div class="index-controls">
+        <button class="tab-btn active" data-tab="kpi">KPI</button>
+        <button class="tab-btn" data-tab="llistats">Llistats</button>
+      </div>
     </div>
-  </div>
 
-  <div id="kpi" class="tab-content">
+    <!-- ===========================
+         KPI VIEW
+    ============================ -->
+    <div id="kpi" class="tab-content kpi-container">
 
-  <div class="kpi-grid" id="kpiGrid">
+      <!-- BOTÓN REAL PARA TAULER COMPACTE -->
+      <button id="compactToggle" class="btn-secondary" style="margin-bottom: 15px;">
+        Tauler compacte
+      </button>
 
-  <div class="card kpi-card">
-  <div class="kpi-icon">💶</div>
-  <div>
-  <h3>Vendes d'avui</h3>
-  <p class="kpi-number">{{vendesAvui}} €</p>
-  </div>
-  </div>
+      <div class="kpi-grid" id="kpiGrid">
 
-  <div class="card kpi-card">
-  <div class="kpi-icon">📅</div>
-  <div>
-  <h3>Vendes del mes</h3>
-  <p class="kpi-number">{{vendesMes}} €</p>
-  </div>
-  </div>
+        <div class="card kpi-card">
+          <div class="kpi-icon">💶</div>
+          <div>
+            <h3>Vendes d'avui</h3>
+            <p class="kpi-number">{{vendesAvui}} €</p>
+          </div>
+        </div>
 
-  <div class="card kpi-card">
-  <div class="kpi-icon">🛒</div>
-  <div>
-  <h3>Comandes avui</h3>
-  <p class="kpi-number">{{ultimesVendes.length}}</p>
-  </div>
-  </div>
+        <div class="card kpi-card">
+          <div class="kpi-icon">📅</div>
+          <div>
+            <h3>Vendes del mes</h3>
+            <p class="kpi-number">{{vendesMes}} €</p>
+          </div>
+        </div>
 
-  <div class="card">
-  <h3>Top productes</h3>
+        <div class="card kpi-card">
+          <div class="kpi-icon">🛒</div>
+          <div>
+            <h3>Comandes avui</h3>
+            <p class="kpi-number">{{comandesAvui}}</p>
+          </div>
+        </div>
 
-  <ul class="list-clean">
-  {{#each topProductes}}
-  <li>{{name}} <strong>{{total_vendes}}</strong></li>
-  {{/each}}
-  </ul>
+        <div class="card kpi-card">
+          <div class="kpi-icon">📦</div>
+          <div>
+            <h3>Comandes del mes</h3>
+            <p class="kpi-number">{{comandesMes}}</p>
+          </div>
+        </div>
 
-  </div>
+        <div class="card">
+          <h3>Productes amb stock baix</h3>
+          <ul class="list-clean">
+            {{#each stockBaix}}
+              <li>{{name}} — <strong>{{stock}}</strong></li>
+            {{/each}}
+          </ul>
+        </div>
 
-  </div>
-  </div>
+      </div>
+    </div>
 
-  <div id="llistats" class="tab-content hidden">
+    <!-- ===========================
+         LLISTATS VIEW
+    ============================ -->
+    <div id="llistats" class="tab-content hidden">
+      <div class="card">
+        <h2>Últimes vendes</h2>
+        <ul class="list-clean">
+          {{#each ultimesVendes}}
+            <li>{{sale_date}} - {{client}} - {{total}} €</li>
+          {{/each}}
+        </ul>
+      </div>
 
-  <div class="card">
-  <h2>Últimes vendes</h2>
+      <div class="card">
+        <h2>Top 5 productes més venuts</h2>
+        <ul class="list-clean">
+          {{#each topProductes}}
+            <li>{{name}} <strong>{{total_vendes}}</strong></li>
+          {{/each}}
+        </ul>
+      </div>
 
-  <ul class="list-clean">
-  {{#each ultimesVendes}}
-  <li>{{sale_date}} - {{client}} - {{total}} €</li>
-  {{/each}}
-  </ul>
-
-  </div>
-
-  <div class="card">
-  <h2>Top 5 productos más vendidos</h2>
-
-  <ul class="list-clean">
-  {{#each topProductes}}
-  <li>{{name}} <strong>{{total_vendes}}</strong></li>
-  {{/each}}
-  </ul>
-
-  </div>
-  </div>
+    </div>
 
   </div>
 

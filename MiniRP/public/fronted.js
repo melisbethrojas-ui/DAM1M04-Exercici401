@@ -54,22 +54,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // =========================
-  // KPI COMPACT
-  // =========================
-  const compactToggle = document.getElementById("compactToggle");
+// =========================
+// KPI COMPACT
+// =========================
+const compactBtn = document.getElementById("compactToggle");
+const kpiGrid = document.getElementById("kpiGrid");
 
-  if (compactToggle) {
-    compactToggle.addEventListener("change", () => {
-      const grid = document.getElementById("kpiGrid");
-      if (!grid) return;
+if (compactBtn && kpiGrid) {
 
-      grid.dataset.mode = compactToggle.checked ? "compacte" : "";
-    });
+  // Cargar estado guardado
+  const savedMode = localStorage.getItem("taulerMode");
+
+  if (savedMode === "compacte") {
+    kpiGrid.dataset.mode = "compacte";
+    compactBtn.textContent = "Tauler complet";
   }
 
+  // Evento del botón
+  compactBtn.addEventListener("click", () => {
+    const isCompact = kpiGrid.dataset.mode === "compacte";
+
+    kpiGrid.dataset.mode = isCompact ? "" : "compacte";
+    compactBtn.textContent = isCompact ? "Tauler compacte" : "Tauler complet";
+
+    localStorage.setItem("taulerMode", isCompact ? "complet" : "compacte");
+  });
+}
+
   // =========================
-  // STOCK COLORS (PRO)
+  // STOCK COLORS
   // =========================
   const stockToggle = document.getElementById("");
 

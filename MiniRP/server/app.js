@@ -49,7 +49,7 @@ hbs.registerHelper('plus', (a, b) => a + b);
 hbs.registerHelper('minus', (a, b) => a - b);
 
 // =====================================
-// REDIRECCIONES CRUD
+// CRUD
 // =====================================
 function redireccionar(taula) {
   if (taula === "products") return "/productes";
@@ -75,6 +75,27 @@ app.get('/', async (req, res) => {
       FROM sales
       WHERE MONTH(sale_date)=MONTH(CURDATE())
     `);
+   
+    const comandesMesRows = await db.query(`
+      SELECT COUNT(*) AS total
+      FROM sales
+      WHERE MONTH(sale_date) = MONTH(CURDATE())
+      AND YEAR(sale_date) = YEAR(CURDATE())
+    `);
+
+    const stockBaixRows = await db.query(`
+      SELECT name, stock
+      FROM products
+      WHERE stock < 5
+      ORDER BY stock ASC
+    `);
+
+    const comandesAvuiRows = await db.query(`
+      SELECT COUNT(*) AS total
+      FROM sales
+      WHERE DATE(sale_date) = CURDATE()
+    `);
+
 
     const ultimesRows = await db.query(`
       SELECT s.id, s.total, s.sale_date, c.name AS client
@@ -96,9 +117,13 @@ app.get('/', async (req, res) => {
     res.render('index', {
       vendesAvui: vendesAvuiRows[0].total || 0,
       vendesMes: vendesMesRows[0].total || 0,
+      comandesAvui: comandesAvuiRows[0].total || 0,
+      comandesMes: comandesMesRows[0].total || 0,
       ultimesVendes: db.table_to_json(ultimesRows),
-      topProductes: db.table_to_json(topRows)
+      topProductes: db.table_to_json(topRows),
+      stockBaix: db.table_to_json(stockBaixRows)
     });
+
 
   } catch (err) {
     console.log(err);
@@ -197,33 +222,27 @@ app.get('/clients', async (req, res) => {
     const limit = 10;
     const offset = pagina * limit;
 
-    let where = `WHERE name LIKE ? OR email LIKE ?`;
-    let params = [`%${cerca}%`, `%${cerca}%`];
-
-    if (vip) {
-      where += `
-      AND id IN (
-        SELECT customer_id
-        FROM sales
-        GROUP BY customer_id
-        HAVING COUNT(*) >= 5
-      )`;
-    }
-
-    // Consulta con el orden correcto: WHERE -> ORDER BY -> LIMIT
     const rows = await db.query(`
-      SELECT *
-      FROM customers
-      ${where}
-      ORDER BY id DESC
+      SELECT 
+        c.*,
+        COUNT(s.customer_id) AS num_compras,
+        COALESCE(SUM(s.total), 0) AS total_gastado
+      FROM customers c
+      LEFT JOIN sales s ON s.customer_id = c.id
+      GROUP BY c.id
+      HAVING (c.name LIKE ? OR c.email LIKE ?)
+      ${vip ? 'AND COUNT(s.customer_id) >= 5' : ''}
+      ORDER BY c.id DESC
       LIMIT ? OFFSET ?
-    `, [...params, limit, offset]); // Añadimos limit y offset como parámetros finales
+    `, [`%${cerca}%`, `%${cerca}%`, limit, offset]);
 
-    // También necesitamos contar el total para la paginación (opcional pero recomendado)
+    // Contador para paginación
     const countRows = await db.query(`
-      SELECT COUNT(*) as total FROM customers ${where}
-    `, params);
-    
+      SELECT COUNT(*) as total 
+      FROM customers c
+      WHERE c.name LIKE ? OR c.email LIKE ?
+    `, [`%${cerca}%`, `%${cerca}%`]);
+
     const total = countRows[0].total;
 
     res.render('clients', {
@@ -344,13 +363,11 @@ app.post('/create', async (req, res) => {
   try {
     let { taula, ...data } = req.body;
 
-    // Si por error 'taula' llega como array ["products", "products"], 
-    // tomamos solo el primer elemento.
     if (Array.isArray(taula)) {
       taula = taula[0];
     }
 
-    console.log("Insertando en:", taula); // Para verificar en consola
+    console.log("Insertando en:", taula); 
 
     await db.query(`INSERT INTO ${taula} SET ?`, [data]);
     res.redirect(redireccionar(taula));
