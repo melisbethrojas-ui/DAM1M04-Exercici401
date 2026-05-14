@@ -5,13 +5,12 @@
 
   <h1>Gestión de productos</h1>
 
-  <!-- BUSCADOR + TOGGLE -->
   <div class="card">
     <form method="GET" action="/productes" class="search-bar">
       
       <input type="text" name="cerca" placeholder="Buscar productos..." value="{{cerca}}">
 
-      <!-- 🔥 ID CORREGIDO -->
+      
       <label class="toggle">
         <input type="checkbox" id="toggleStockColors">
         <span>Colores de stock</span>
@@ -21,10 +20,7 @@
     </form>
   </div>
 
-  <!-- TABLA -->
-  <!-- TABLA -->
 <div class="card">
-  <!-- Añadimos un ID a la tabla para el JS y verificamos si debe empezar coloreada -->
   <table class="table" id="productTable">
     <thead>
       <tr>
@@ -44,7 +40,6 @@
         <td>{{category}}</td>
         <td>{{price}} €</td>
 
-        <!-- Dinamismo de colores basado en el valor de stock -->
         <td class="stock-value 
             {{#if (gt stock 20)}}stock-ok{{else}}{{#if (gt stock 5)}}stock-low{{else}}stock-critical{{/if}}{{/if}}">
           {{stock}}
@@ -63,10 +58,6 @@
 <script>
   const toggle = document.getElementById('toggleStockColors');
   const table = document.getElementById('productTable');
-
-  // 1. Al cargar la página, comprobar si el toggle estaba activo (opcional pero recomendado)
-  // Si quieres que al pulsar "Buscar" se mantenga el color, necesitarías pasar el estado por URL,
-  // pero por ahora hagamos que funcione el click:
 
   toggle.addEventListener('change', () => {
     if (toggle.checked) {

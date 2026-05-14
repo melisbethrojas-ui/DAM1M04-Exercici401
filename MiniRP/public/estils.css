@@ -75,7 +75,39 @@ body.theme-contrast{
   padding:0;
   box-sizing:border-box;
 }
+/* ===========================
+   CONTENEDOR PRINCIPAL
+=========================== */
+.container {
+    width: 90%;           
+    max-width: 1200px;     
+    margin: 40px auto;     
+    min-height: 80vh;     
+}
 
+/* Alineación de los elementos dentro de la barra de búsqueda */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.search-bar input[type="text"] {
+  flex: 1; 
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
 /* ===========================
    BODY
 =========================== */
@@ -550,39 +582,4 @@ h3{
   .menu{
     padding-inline:18px;
   }
-}
-
-
-/* ===========================
-   CONTENEDOR PRINCIPAL
-=========================== */
-.container {
-    width: 90%;           
-    max-width: 1200px;     
-    margin: 40px auto;     
-    min-height: 80vh;     
-}
-
-/* Alineación de los elementos dentro de la barra de búsqueda */
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.search-bar input[type="text"] {
-  flex: 1; 
-  min-width: 200px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  user-select: none;
 }
