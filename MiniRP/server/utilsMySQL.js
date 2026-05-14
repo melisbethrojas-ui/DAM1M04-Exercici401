@@ -45,6 +45,10 @@ class Obj {
 
     // Converteix el resultat d'una consulta a JSON
     table_to_json(rows, schema = {}) {
+
+        // ⭐ ARREGLO CRÍTICO: evitar errores cuando rows es undefined/null
+        if (!Array.isArray(rows)) return [];
+
         const cast = (v, forcedType) => {
             if (v === null || v === undefined) return null;
 

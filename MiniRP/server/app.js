@@ -12,19 +12,18 @@ const port = 3000;
 const isProxmox = !!process.env.PM2_HOME;
 
 const db = new MySQL();
-
 if (!isProxmox) {
   db.init({
     host: '127.0.0.1',
-    port: 3306,
-    user: 'root',
+    port: 3307,
+    user: 'super',
     password: '1234',
     database: 'minierp'
   });
 } else {
   db.init({
-    host: 'localhost',
-    port: 3307,
+    host: '127.0.0.1',
+    port: 3306,
     user: 'super',
     password: '1234',
     database: 'minierp'
@@ -49,7 +48,7 @@ hbs.registerHelper('plus', (a, b) => a + b);
 hbs.registerHelper('minus', (a, b) => a - b);
 
 // =====================================
-// CRUD
+// REDIRECCIONES CRUD
 // =====================================
 function redireccionar(taula) {
   if (taula === "products") return "/productes";
@@ -222,6 +221,7 @@ app.get('/clients', async (req, res) => {
     const limit = 10;
     const offset = pagina * limit;
 
+    // CONSULTA CORRECTA
     const rows = await db.query(`
       SELECT 
         c.*,
@@ -363,11 +363,13 @@ app.post('/create', async (req, res) => {
   try {
     let { taula, ...data } = req.body;
 
+    // Si por error 'taula' llega como array ["products", "products"], 
+    // tomamos solo el primer elemento.
     if (Array.isArray(taula)) {
       taula = taula[0];
     }
 
-    console.log("Insertando en:", taula); 
+    console.log("Insertando en:", taula); // Para verificar en consola
 
     await db.query(`INSERT INTO ${taula} SET ?`, [data]);
     res.redirect(redireccionar(taula));
@@ -428,7 +430,7 @@ app.post('/delete', async (req, res) => {
 // SERVER
 // =====================================
 const httpServer = app.listen(port, () => {
-  console.log(`MiniERP → http://localhost:${port}`);
+  console.log(`http://localhost:${port}`);
 });
 
 process.on('SIGINT', async () => {

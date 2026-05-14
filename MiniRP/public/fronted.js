@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 // =========================
-// KPI COMPACT
+// KPI COMPACT (BOTÓN)
 // =========================
 const compactBtn = document.getElementById("compactToggle");
 const kpiGrid = document.getElementById("kpiGrid");
@@ -82,7 +82,7 @@ if (compactBtn && kpiGrid) {
 }
 
   // =========================
-  // STOCK COLORS
+  // STOCK COLORS (PRO)
   // =========================
   const stockToggle = document.getElementById("");
 
