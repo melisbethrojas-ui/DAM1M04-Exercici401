@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // =========================
-  // THEME
-  // =========================
+  // Tema
   const themeSelector = document.getElementById("themeSelector");
 
   if (themeSelector) {
@@ -32,9 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // =========================
   // TABS
-  // =========================
   const tabButtons = document.querySelectorAll(".tab-btn");
 
   if (tabButtons.length) {
@@ -54,9 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-// =========================
-// KPI COMPACT (BOTÓN)
-// =========================
+// KPI COMPACT
 const compactBtn = document.getElementById("compactToggle");
 const kpiGrid = document.getElementById("kpiGrid");
 
@@ -69,8 +63,7 @@ if (compactBtn && kpiGrid) {
     kpiGrid.dataset.mode = "compacte";
     compactBtn.textContent = "Tauler complet";
   }
-
-  // Evento del botón
+  
   compactBtn.addEventListener("click", () => {
     const isCompact = kpiGrid.dataset.mode === "compacte";
 
@@ -81,9 +74,7 @@ if (compactBtn && kpiGrid) {
   });
 }
 
-  // =========================
-  // STOCK COLORS (PRO)
-  // =========================
+  // Control de los colores del Stock
   const stockToggle = document.getElementById("");
 
   function pintarStock() {
