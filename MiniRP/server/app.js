@@ -6,9 +6,7 @@ const MySQL = require('./utilsMySQL');
 const app = express();
 const port = 3000;
 
-// =====================================
 // BASE DE DATOS
-// =====================================
 const isProxmox = !!process.env.PM2_HOME;
 
 const db = new MySQL();
@@ -30,9 +28,6 @@ if (!isProxmox) {
   });
 }
 
-// =====================================
-// MIDDLEWARES
-// =====================================
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.urlencoded({ extended: true }));
 
@@ -47,9 +42,7 @@ hbs.registerHelper('gt', (a, b) => a > b);
 hbs.registerHelper('plus', (a, b) => a + b);
 hbs.registerHelper('minus', (a, b) => a - b);
 
-// =====================================
-// REDIRECCIONES CRUD
-// =====================================
+// Redirreciones para despues de editar, crear, borrar.
 function redireccionar(taula) {
   if (taula === "products") return "/productes";
   if (taula === "customers") return "/clients";
@@ -57,45 +50,42 @@ function redireccionar(taula) {
   return "/";
 }
 
-// =====================================
-// index
-// =====================================
+// Index
 app.get('/', async (req, res) => {
   try {
-
+    // KPI
     const vendesAvuiRows = await db.query(`
       SELECT SUM(total) AS total
       FROM sales
       WHERE DATE(sale_date)=CURDATE()
     `);
-
+    // KPI
     const vendesMesRows = await db.query(`
       SELECT SUM(total) AS total
       FROM sales
       WHERE MONTH(sale_date)=MONTH(CURDATE())
     `);
-   
+    // KPI
     const comandesMesRows = await db.query(`
       SELECT COUNT(*) AS total
       FROM sales
       WHERE MONTH(sale_date) = MONTH(CURDATE())
       AND YEAR(sale_date) = YEAR(CURDATE())
     `);
-
+    // KPI
     const stockBaixRows = await db.query(`
       SELECT name, stock
       FROM products
       WHERE stock < 5
       ORDER BY stock ASC
     `);
-
+    // KPI
     const comandesAvuiRows = await db.query(`
       SELECT COUNT(*) AS total
       FROM sales
       WHERE DATE(sale_date) = CURDATE()
     `);
-
-
+    // Tabla
     const ultimesRows = await db.query(`
       SELECT s.id, s.total, s.sale_date, c.name AS client
       FROM sales s
@@ -103,7 +93,7 @@ app.get('/', async (req, res) => {
       ORDER BY s.sale_date DESC
       LIMIT 5
     `);
-
+    // Tabla
     const topRows = await db.query(`
       SELECT p.name, SUM(si.qty) AS total_vendes
       FROM sale_items si
@@ -130,20 +120,18 @@ app.get('/', async (req, res) => {
   }
 });
 
-// =====================================
-// PRODUCTES
-// =====================================
+// PRODUCTOS
 app.get('/productes', async (req, res) => {
 
   try {
-
+    // Paginas y Busqueda
     const pagina = parseInt(req.query.pagina) || 0;
     const cerca = req.query.cerca || "";
-
+    // solo muestra 10 productos por pagina
     const limit = 10;
     const offset = pagina * limit;
 
-    // En app.js -> app.get('/productes')
+    
     const rows = await db.query(`
         SELECT *
         FROM products
@@ -152,6 +140,7 @@ app.get('/productes', async (req, res) => {
         LIMIT ? OFFSET ?
     `, [`%${cerca}%`, `%${cerca}%`, limit, offset]);
 
+    // Contador de paginas
     const countRows = await db.query(`
       SELECT COUNT(*) total
       FROM products
@@ -176,22 +165,18 @@ app.get('/productes', async (req, res) => {
 
 });
 
-// =====================================
-// PRODUCTE AFEGIR
-// =====================================
+// AGREGAR PRODUCTOS
 app.get('/producteAfegir', (req, res) => {
   res.render('producteAfegir');
 });
 
-// =====================================
-// PRODUCTE EDITAR
-// =====================================
+// EDITAR PRODUCTOS
 app.get('/producteEditar', async (req, res) => {
 
   try {
 
     const id = req.query.id;
-
+    // cargar datos del producto
     const rows = await db.query(`
       SELECT *
       FROM products
@@ -209,9 +194,7 @@ app.get('/producteEditar', async (req, res) => {
 
 });
 
-// =====================================
-// CLIENTS
-// =====================================
+// CLIENTES
 app.get('/clients', async (req, res) => {
   try {
     const pagina = parseInt(req.query.pagina) || 0;
@@ -221,7 +204,7 @@ app.get('/clients', async (req, res) => {
     const limit = 10;
     const offset = pagina * limit;
 
-    // CONSULTA CORRECTA
+    // clientes + nº compras + total gastado
     const rows = await db.query(`
       SELECT 
         c.*,
@@ -236,7 +219,7 @@ app.get('/clients', async (req, res) => {
       LIMIT ? OFFSET ?
     `, [`%${cerca}%`, `%${cerca}%`, limit, offset]);
 
-    // Contador para paginación
+    // Contador de paginas
     const countRows = await db.query(`
       SELECT COUNT(*) as total 
       FROM customers c
@@ -262,22 +245,18 @@ app.get('/clients', async (req, res) => {
   }
 });
 
-// =====================================
-// CLIENT AFEGIR
-// =====================================
+// AGREGAR CLIENTE
 app.get('/clientAfegir', (req, res) => {
   res.render('clientAfegir');
 });
 
-// =====================================
-// CLIENT EDITAR
-// =====================================
+// EDITAR CLIENTE
 app.get('/clientEditar', async (req, res) => {
 
   try {
 
     const id = req.query.id;
-
+    // cargar datos del cliente
     const rows = await db.query(`
       SELECT *
       FROM customers
@@ -295,21 +274,19 @@ app.get('/clientEditar', async (req, res) => {
 
 });
 
-// =====================================
-// FITXA CLIENT
-// =====================================
+// FICHA DEL CLIENTE
 app.get('/clientFitxa', async (req, res) => {
 
   try {
 
     const id = req.query.id;
-
+    // datos del cliente 
     const clientRows = await db.query(`
       SELECT *
       FROM customers
       WHERE id=?
     `, [id]);
-
+    // buscar las ultimas 10 compras del cliente
     const vendesRows = await db.query(`
       SELECT *
       FROM sales
@@ -330,9 +307,7 @@ app.get('/clientFitxa', async (req, res) => {
 
 });
 
-// =====================================
-// VENDES
-// =====================================
+// VENTAS
 app.get('/vendes', async (req, res) => {
 
   try {
@@ -356,15 +331,11 @@ app.get('/vendes', async (req, res) => {
 
 });
 
-// =====================================
 // CREATE
-// =====================================
 app.post('/create', async (req, res) => {
   try {
     let { taula, ...data } = req.body;
-
-    // Si por error 'taula' llega como array ["products", "products"], 
-    // tomamos solo el primer elemento.
+    // Si llega como array ["products", "products"], usa el primero
     if (Array.isArray(taula)) {
       taula = taula[0];
     }
@@ -379,9 +350,8 @@ app.post('/create', async (req, res) => {
     res.status(500).send("Error al guardar: " + (err.sqlMessage || "Datos inválidos"));
   }
 });
-// =====================================
+
 // UPDATE
-// =====================================
 app.post('/update', async (req, res) => {
 
   try {
@@ -403,9 +373,7 @@ app.post('/update', async (req, res) => {
 
 });
 
-// =====================================
 // DELETE
-// =====================================
 app.post('/delete', async (req, res) => {
 
   try {
@@ -426,9 +394,7 @@ app.post('/delete', async (req, res) => {
 
 });
 
-// =====================================
 // SERVER
-// =====================================
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });
