@@ -66,7 +66,7 @@ function validarCliente() {
     groupName.classList.remove('error');
   }
 
-  // Validar Email básico
+  // Validar Email
   const email = document.getElementById('email');
   const groupEmail = document.getElementById('group-email');
   if (!email.value.includes('@') || email.value.length < 5) {
@@ -76,7 +76,7 @@ function validarCliente() {
     groupEmail.classList.remove('error');
   }
 
-  // Validar Teléfono básico
+  // Validar Teléfono
   const phone = document.getElementById('phone');
   const groupPhone = document.getElementById('group-phone');
   if (phone.value.trim().length < 9) {
