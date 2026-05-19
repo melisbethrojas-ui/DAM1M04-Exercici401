@@ -136,7 +136,7 @@ app.get('/productes', async (req, res) => {
         SELECT *
         FROM products
         WHERE name LIKE ? OR category LIKE ?
-        ORDER BY id DESC    -- <--- AÑADE ESTA LÍNEA
+        ORDER BY id DESC   
         LIMIT ? OFFSET ?
     `, [`%${cerca}%`, `%${cerca}%`, limit, offset]);
 
