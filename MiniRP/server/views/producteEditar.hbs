@@ -55,7 +55,9 @@
       <p style="font-size: 0.85rem; color: var(--text-soft); margin-bottom: 15px;">
         Esta acción es irreversible. El producto se eliminará de la base de datos de forma permanente.
       </p>
-      <form method="POST" action="/delete" onsubmit="return confirm('¿Estás seguro de eliminar este producto?')">
+
+      <!-- WARNING ELIMINADO COMO PIDIÓ TU PROFESOR -->
+      <form method="POST" action="/delete">
         <input type="hidden" name="taula" value="products">
         <input type="hidden" name="id" value="{{producte.id}}">
         <button class="btn-danger">Eliminar producto definitivamente</button>

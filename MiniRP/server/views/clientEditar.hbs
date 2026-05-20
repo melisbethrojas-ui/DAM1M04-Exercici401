@@ -42,7 +42,9 @@
       <p style="font-size: 0.85rem; color: var(--text-soft); margin-bottom: 15px;">
         Al eliminar este cliente, se borrarán sus datos permanentemente. Asegúrate de que no tenga ventas pendientes.
       </p>
-      <form method="POST" action="/delete" onsubmit="return confirm('¿Estás 100% seguro de que quieres eliminar a este cliente?')">
+
+      <!-- WARNING ELIMINADO COMO PIDIÓ TU PROFESOR -->
+      <form method="POST" action="/delete">
         <input type="hidden" name="taula" value="customers">
         <input type="hidden" name="id" value="{{client.id}}">
         <button class="btn-danger">Eliminar cliente definitivamente</button>
